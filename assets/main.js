@@ -9,7 +9,7 @@ $(document).ready(function() {
     btn.on("click", function() {
         let p = $("<p>");
         let city = $("#input").val();
-        let queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + 
+        let queryUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + 
                        "&APPID=1a12ade99b308e8c20a740db7ad02276";
             
             p.addClass("col border my-0 bg-white d-flex align-items-center")
@@ -23,7 +23,7 @@ $(document).ready(function() {
             method: "GET" 
         })
            .then(function(response) {
-               let queryUv = "http://api.openweathermap.org/data/2.5/uvi?appid=1a12ade99b308e8c20a740db7ad02276&lat=" + response.coord.lat + "&lon=" + response.coord.lon
+               let queryUv = "https://api.openweathermap.org/data/2.5/uvi?appid=1a12ade99b308e8c20a740db7ad02276&lat=" + response.coord.lat + "&lon=" + response.coord.lon
              $.ajax({
                  url: queryUv, 
                  method: "GET",

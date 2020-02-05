@@ -31,11 +31,12 @@ $(document).ready(function() {
                 .then(function(res) {
                      console.log(res)
                      uvIndex = res.value;
-                     console.log(uvIndex)
                      let feh = (response.main.temp - 273.15) * 9/5 + 32;
                         console.log(response)
                         data.empty(); divW.empty();
-                     data.text(response.name + " (" + date + ")");  
+                        data.text(response.name + " (" + date + ")");  
+                    //  let photo = response.weather[0].icon 
+                    //  $("<img>").attr("src","https://openweathermap.org/img/wn/"+ photo + "@2x.png").addClass("bg-success d-block").appendTo(data)  
                      $("<p>").text("Temperature: "+ feh.toFixed(2) + " °F").appendTo(divW);
                      $("<p>").text("Humidity: "+ response.main.humidity + "%").appendTo(divW);
                      $("<p>").text("Wind Speed: "+ response.wind.speed + " MPH").appendTo(divW);
@@ -57,38 +58,34 @@ $(document).ready(function() {
             url: queryForeCast,
             method: "GET"
         })  
-            .then(function(data) {
+            .then(function(info) {
               
-                console.log(data)
+                console.log(info)
                 let x = 4;
                 for(i=1; i<6; i++) {
                  let divD = $("div[data-num="+ i +"]");
-                 let feh = (data.list[(i+2)*i].main.temp - 273.15) * 9/5 + 32;
+                 let feh = (info.list[(i+2)*i].main.temp - 273.15) * 9/5 + 32;
                      divD.empty()
                  $("<h6>").text(moment(date).add(i, "day").format("L")).appendTo(divD)
 
                  function weather(status,index) {
-                            if(index >= data.list.length){
-                             random = Math.floor(Math.random()*(data.list.length-32))+x;
+                            if(index >= info.list.length){
+                             random = Math.floor(Math.random()*(info.list.length-32))+x;
                              weather(status,random)
                              console.log(random)
                             }
-                            else if(index < data.list.length) {
-                            let photo = data.list[index].weather[0].icon;
-                            if(data.list[index].weather[0].main.includes(status)){
+                            else if(index < info.list.length) {
+                            let photo = info.list[index].weather[0].icon;
+                            if(info.list[index].weather[0].main.includes(status)){
                     $("<img>").attr("src","https://openweathermap.org/img/wn/"+ photo + "@2x.png")
                               .appendTo(divD)
                            
                             }                
                          }                
                      }
-            //          let photo = data.list[index].weather[0].icon;
-            //          if(data.list[index].weather[0].main.includes(status)){
-            //  $("<img>").attr("src","https://openweathermap.org/img/wn/"+ photo + "@2x.png")
-            //            .appendTo(divD)
-            //                           }
+          
                                       
-                 let random = Math.floor(Math.random()*(data.list.length-32))+x;
+                 let random = Math.floor(Math.random()*(info.list.length-32))+x;
                  console.log(random)
 
                   weather("Clear",random);
@@ -109,7 +106,7 @@ $(document).ready(function() {
 
                              
                     $("<p>").text("Temp: " + feh.toFixed(2) + " °F").appendTo(divD) 
-                    $("<p>").text("Humidity: " + data.list[(i+2)*i].main.humidity + "%").appendTo(divD)     
+                    $("<p>").text("Humidity: " + info.list[(i+2)*i].main.humidity + "%").appendTo(divD)     
                    x+=8;
                 }
                 

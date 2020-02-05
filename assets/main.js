@@ -32,7 +32,7 @@ $(document).ready(function() {
                      console.log(res)
                      uvIndex = res.value;
                      console.log(uvIndex)
-                     let feh = (response.main.temp - 273.15) * 9/5 + 32
+                     let feh = (response.main.temp - 273.15) * 9/5 + 32;
                         console.log(response)
                         data.empty(); divW.empty();
                      data.text(response.name + " (" + date + ")");  
@@ -52,27 +52,67 @@ $(document).ready(function() {
                     })
            })
         let queryForeCast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=1a12ade99b308e8c20a740db7ad02276"
-        // console.log(queryForeCast)
+       
         $.ajax({
             url: queryForeCast,
             method: "GET"
         })  
             .then(function(data) {
-                // console.log(data.list[0].dt_txt[11]+""+data.list[0].dt_txt[12])
-                // var time = new Date().getHours()
-                // console.log(time)
+              
                 console.log(data)
+                let x = 4;
                 for(i=1; i<6; i++) {
-                 let divD = $("div[data-num="+ i +"]") 
+                 let divD = $("div[data-num="+ i +"]");
+                 let feh = (data.list[(i+2)*i].main.temp - 273.15) * 9/5 + 32;
                      divD.empty()
                  $("<h6>").text(moment(date).add(i, "day").format("L")).appendTo(divD)
-                 $("<i>").text("\u{1F327}")
-                         .css("font-size","40px")
-                         .appendTo(divD)
-                 $("<p>").text("Temp: " + data.list[(i+2)*i].main.temp.toFixed(2)).appendTo(divD) 
-                 $("<p>").text("Humidity: " + data.list[(i+2)*i].main.humidity.toFixed(2)).appendTo(divD)     
+
+                 function weather(status,index) {
+                            if(index >= data.list.length){
+                             random = Math.floor(Math.random()*(data.list.length-32))+x;
+                             weather(status,random)
+                             console.log(random)
+                            }
+                            else if(index < data.list.length) {
+                            let photo = data.list[index].weather[0].icon;
+                            if(data.list[index].weather[0].main.includes(status)){
+                    $("<img>").attr("src","https://openweathermap.org/img/wn/"+ photo + "@2x.png")
+                              .appendTo(divD)
+                           
+                            }                
+                         }                
+                     }
+            //          let photo = data.list[index].weather[0].icon;
+            //          if(data.list[index].weather[0].main.includes(status)){
+            //  $("<img>").attr("src","https://openweathermap.org/img/wn/"+ photo + "@2x.png")
+            //            .appendTo(divD)
+            //                           }
+                                      
+                 let random = Math.floor(Math.random()*(data.list.length-32))+x;
+                 console.log(random)
+
+                  weather("Clear",random);
+                  weather("Thunderstorm",random)
+                  weather("Drizzle",random)
+                  weather("Rain",random)
+                  weather("Snow",random)
+                  weather("Mist",random)
+                  weather("Smoke",random)
+                  weather("Haze",random)
+                  weather("Dust",random)
+                  weather("Fog",random)
+                  weather("Sand",random)
+                  weather("Ash",random)
+                  weather("Squall",random)
+                  weather("Tornado",random)
+                  weather("Clouds",random)
+
+                             
+                    $("<p>").text("Temp: " + feh.toFixed(2) + " °F").appendTo(divD) 
+                    $("<p>").text("Humidity: " + data.list[(i+2)*i].main.humidity + "%").appendTo(divD)     
+                   x+=8;
                 }
-                 console.log(moment(date).add(1, "day").format("L"))
+                
             })
     })
 

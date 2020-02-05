@@ -51,6 +51,29 @@ $(document).ready(function() {
                     
                     })
            })
+        let queryForeCast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=1a12ade99b308e8c20a740db7ad02276"
+        // console.log(queryForeCast)
+        $.ajax({
+            url: queryForeCast,
+            method: "GET"
+        })  
+            .then(function(data) {
+                // console.log(data.list[0].dt_txt[11]+""+data.list[0].dt_txt[12])
+                // var time = new Date().getHours()
+                // console.log(time)
+                console.log(data)
+                for(i=1; i<6; i++) {
+                 let divD = $("div[data-num="+ i +"]") 
+                     divD.empty()
+                 $("<h6>").text(moment(date).add(i, "day").format("L")).appendTo(divD)
+                 $("<i>").text("\u{1F327}")
+                         .css("font-size","40px")
+                         .appendTo(divD)
+                 $("<p>").text("Temp: " + data.list[(i+2)*i].main.temp.toFixed(2)).appendTo(divD) 
+                 $("<p>").text("Humidity: " + data.list[(i+2)*i].main.humidity.toFixed(2)).appendTo(divD)     
+                }
+                 console.log(moment(date).add(1, "day").format("L"))
+            })
     })
 
 })
